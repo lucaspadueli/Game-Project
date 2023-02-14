@@ -1,7 +1,6 @@
 const canvas = document.getElementById("canvas-project")
 const ctx = canvas.getContext('2d');
 
-
 class Hero {
   constructor(){
     this.x = 505;
@@ -37,13 +36,20 @@ class Hero {
       this.y += 25};
   }
   moveLeft() {
-    this.x -= 25;
+    this.x -= 48;
   }
   moveRight() {
-    this.x += 25;
+    this.x += 48;
+  }
+
+  slideRight(){
+    this.x += 170;
+  }
+  slideLeft(){
+    this.x -= 170;
   }
   draw() {
-    ctx.drawImage(this.img, this.x, this.y, 70, 70);
+    ctx.drawImage(this.img, this.x, this.y, 85, 85);
   }
 }
 
@@ -53,20 +59,25 @@ class Floor {
    this.y = 518;
    this.width = 700;
    this.height = 150;
-   this.color = "purple";
+   this.color = "green";
   }
 
   draw() {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x,this.y,this.width,this.height);
   }
-}
+
+  update (){
+  
+  
+}}
+
 
 class DarkSadFace {
-  constructor(x, y) {
+  constructor(x, y,speed) {
     this.x = x;
     this.y = y;
-    this.speed = 4;
+    this.speed = speed;
     
   }
   
@@ -91,7 +102,7 @@ class DarkSadFace {
     ctx.fill();
 
     // Draw the character's mouth
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "white";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.arc(this.x, this.y - 8, 4, Math.PI, 2 * Math.PI, true);
@@ -107,18 +118,116 @@ class DarkSadFace {
 
 }
 
+// happy yellow face.
 
-let darkSadFace = new DarkSadFace(100, 0);
+class HappyYellowFace {
+  constructor (x,y,speed) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+  }
+
+  draw (ctx) {
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's eyes
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(this.x - 5, this.y + 5, 3, 0, 2 * Math.PI);
+    ctx.arc(this.x + 5, this.y + 5, 3, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's pupils
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(this.x - 5, this.y + 5, 1, 0, 2 * Math.PI);
+    ctx.arc(this.x + 5, this.y + 5, 1, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's mouth
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y - 8, 4, Math.PI, 2 * Math.PI, false);
+    ctx.stroke();
+  }
+  update() {
+    this.y += this.speed;
+    if (this.y > 650) {
+      this.y = Math.floor(Math.random() * 150);
+      this.x = Math.floor(Math.random() * 700)
+    }
+  }
+
+}
+
+class Flower {
+  constructor(x, y, speed) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = "orange";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 20, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillStyle = "yellow";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
+    ctx.fill();
+    for (let i = 0; i < 360; i += 45) {
+      let x = this.x + Math.cos(i * Math.PI / 180) * 15;
+      let y = this.y + Math.sin(i * Math.PI / 180) * 15;
+      ctx.fillStyle = "yellow";
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    
+  }
+
+  update() {
+    this.y -= this.speed;
+    if (this.y <= 0) {
+      this.y = 650;
+      this.x = Math.floor(Math.random() * 700)
+    }
+  }
+}
+
+
+
+let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 150),Math.floor(Math.random() * 700), 5);
+let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 150), this.x = Math.floor(Math.random() * 700), 5);
 const floor = new Floor();
 const hero = new Hero();
+let flower = new Flower (300, 650, 3);
+
 
 let intervalId = setInterval(() => {
   darkSadFace.update();
-  
-  if (darkSadFace.y > 650) {
+  happyYellowFace.update();
+  flower.update();
+  floor.update();
+  if (flower.y >= 460) {
     clearInterval(intervalId);
+    setTimeout(() => {
+      intervalId = setInterval(() => {
+        darkSadFace.update();
+        happyYellowFace.update();
+        flower.update();
+      }, 16);
+    }, Math.floor(Math.random() * 5000)); // set a random interval of time between 0 and 5000ms
   }
 }, 16);
+
+
 document.addEventListener('keydown', e => {
   console.log(e);
   switch (e.keyCode) {
@@ -134,20 +243,42 @@ document.addEventListener('keydown', e => {
     case 39:
       hero.moveRight();
       break;
+      case 32:
+        hero.slideRight();
+        break;
+        case 86:
+          hero.slideLeft();
+          break;
   }
   updateCanvas();
 })
 
 
- 
+const sky = new Image();
+sky.src = "/images/starPic.png";
+sky.addEventListener("load", ()=> {
+  updateCanvas();
+})
   
+let time = 0;
+function timer (){
+time += 1;
+console.log(`Time is ${time}`);
+}
+const timerInterval = setInterval(timer,1000)
 
 function updateCanvas() {
-  ctx.clearRect(0, 0, 700, 650)
   
+  ctx.clearRect(0, 0, 700, 650)
+  ctx.drawImage(sky, 0, 0, 700, 650);
   floor.draw();
   hero.draw();
   darkSadFace.draw(ctx);
+  happyYellowFace.draw(ctx);
+  flower.draw(ctx);
+  ctx.font = "20px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText(`Time: ${time}`,10, 25);
   
   requestAnimationFrame(updateCanvas);
 }
