@@ -121,10 +121,10 @@ class DarkSadFace {
 // happy yellow face.
 
 class HappyYellowFace {
-  constructor (x,y,speed) {
+  constructor (x,y) {
     this.x = x;
     this.y = y;
-    this.speed = speed;
+    this.speed = 5;
   }
 
   draw (ctx) {
@@ -204,27 +204,20 @@ class Flower {
 
 
 let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 150),Math.floor(Math.random() * 700), 5);
-let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 150), this.x = Math.floor(Math.random() * 700), 5);
+let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 150),Math.floor(Math.random() * 700));
 const floor = new Floor();
 const hero = new Hero();
 let flower = new Flower (300, 650, 3);
-
+let secondFace = new HappyYellowFace (Math.floor(Math.random() * 150),Math.floor(Math.random() * 700));
+let secondSadFace = new DarkSadFace (Math.floor(Math.random() * 150),Math.floor(Math.random() * 700), 5);
 
 let intervalId = setInterval(() => {
   darkSadFace.update();
   happyYellowFace.update();
   flower.update();
   floor.update();
-  if (flower.y >= 460) {
-    clearInterval(intervalId);
-    setTimeout(() => {
-      intervalId = setInterval(() => {
-        darkSadFace.update();
-        happyYellowFace.update();
-        flower.update();
-      }, 16);
-    }, Math.floor(Math.random() * 5000)); // set a random interval of time between 0 and 5000ms
-  }
+  secondFace.update(); 
+  secondSadFace.update();
 }, 16);
 
 
@@ -265,7 +258,10 @@ function timer (){
 time += 1;
 console.log(`Time is ${time}`);
 }
-const timerInterval = setInterval(timer,1000)
+const timerInterval = setInterval(timer,1000);
+
+
+
 
 function updateCanvas() {
   
@@ -279,6 +275,23 @@ function updateCanvas() {
   ctx.font = "20px Arial";
   ctx.fillStyle = "white";
   ctx.fillText(`Time: ${time}`,10, 25);
+  if(time > 15){
+    secondFace.draw(ctx);
+    secondSadFace.draw(ctx);
+  }
+  if(darkSadFace.x === happyYellowFace.x){
+    darkSadFace.x += 50
+  }
+  else if(darkSadFace.x === secondFace.x){
+    darkSadFace.x += 50
+  }
+  else if(secondSadFace.x === happyYellowFace.x){
+    secondSadFace.x += 50
+  }
+  else if(secondSadFace.x === secondFace.x){
+    secondSadFace.x += 50
+  }
+  
   
   requestAnimationFrame(updateCanvas);
 }
