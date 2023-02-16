@@ -1,6 +1,35 @@
 const canvas = document.getElementById("canvas-project")
 const ctx = canvas.getContext('2d');
 
+const firstScreen = document.getElementById("first-screen");
+const ctx3 = firstScreen.getContext("2d");
+
+function startScreen () {
+  ctx3.fillStyle = "blue";
+  ctx3.fillRect(0, 0, 700, 650);
+
+  // draw the button
+  ctx3.fillStyle = "red";
+  ctx3.fillRect(250, 300, 200, 100);
+  ctx3.fillStyle = "white";
+  ctx3.font = "30px Arial";
+  ctx3.fillText("Start", 305, 360);
+
+  // add a click event listener to the button
+  firstScreen.addEventListener("click", (event) => {
+    const x = event.clientX - event.target.offsetLeft;
+    const y = event.clientY - event.target.offsetTop;
+
+    if (x >= 250 && x <= 450 && y >= 300 && y <= 400) {
+      firstScreen.style.display = "none";
+      canvas.style.display = "block";
+      updateCanvas();
+    }
+  });
+}
+
+startScreen();
+
 class Hero {
   constructor(){
     this.x = 505;
@@ -117,7 +146,7 @@ class DarkSadFace {
     this.y += this.speed;
     if (this.y > 650) {
       this.y = 0;
-      let darkPositions = [80,120,170,215,277,321,382,425,490,515,540,565];
+      let darkPositions = [120,160,240,300,360,400,480,550,620];
       for(let i = 0; i < darkPositions.length; i++){
         this.x = darkPositions[Math.floor(Math.random() * darkPositions.length)]
       }
@@ -224,13 +253,13 @@ class Flower {
 }
 
 
-let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 150),Math.floor(Math.random() * 700), 5);
+let darkSadFace = new DarkSadFace(400,0,5);
 let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 700),0);
 const floor = new Floor();
 const hero = new Hero();
 let flower = new Flower (300, 650, 3);
 let secondFace = new HappyYellowFace (Math.floor(Math.random() * 700),0);
-let secondSadFace = new DarkSadFace (Math.floor(Math.random() * 150),Math.floor(Math.random() * 700), 5);
+let secondSadFace = new DarkSadFace (600,0, 5);
 
 let intervalId = setInterval(() => {
   darkSadFace.update();
@@ -263,9 +292,11 @@ document.addEventListener('keydown', e => {
         case 86:
           hero.slideLeft();
           break;
+          
   }
   updateCanvas();
 })
+
 
 
 const sky = new Image();
@@ -273,7 +304,7 @@ sky.src = "/images/starPic.png";
 sky.addEventListener("load", ()=> {
   updateCanvas();
 })
-let score = 0;
+
 let time = 0;
 function timer (){
 time += 1;
@@ -320,8 +351,28 @@ function flowerCollision (hero, flower){
 }
 }
 
-function updateCanvas() {
+function darkCollision (hero, face){
+  if (hero.x < face.x + 10 &&
+    hero.x + 10 > face.x &&
+    hero.y < face.y + 10 &&
+    hero.y + 10 > face.y && !face.collisionDetected) {
+     return true;
+  face.y = 700;
   
+} }
+
+function secondDarkCollision (hero, face){
+  if (hero.x < face.x + 50 &&
+    hero.x + 50 > face.x &&
+    hero.y < face.y + 50 &&
+    hero.y + 50 > face.y && !face.collisionDetected) {
+     return true;
+  face.y = 700;
+  
+} }
+let gameOver = false;
+let gameStarted = false;
+function updateCanvas() {
   ctx.clearRect(0, 0, 700, 650)
   ctx.drawImage(sky, 0, 0, 700, 650);
   floor.draw();
@@ -337,6 +388,14 @@ function updateCanvas() {
   score += collision(hero,happyYellowFace);
   score += secondCollision(hero,secondFace);
   score += flowerCollision(hero,flower);
+  if(darkCollision (hero,darkSadFace)){
+    gameOver = true;
+    canvas.style.display = "none";
+    gameOverCanvas.style.display = "block";
+    drawGameOver(score);
+  } 
+  
+  
   ctx.fillText(`Score: ${score}`,600, 25);
   if(time > 25){
     secondFace.draw(ctx);
@@ -345,15 +404,27 @@ function updateCanvas() {
     darkSadFace.speed = 7;
     flower.speed = 5;
   }
-  
-  
-  requestAnimationFrame(updateCanvas);
+  if(!gameOver){
+    requestAnimationFrame(updateCanvas)
+  }
+  function drawGameOver(score) {
+    ctx2.fillStyle = "black";
+    ctx2.fillRect(0,0,700,650);
+    ctx2.font = "30px Arial";
+    ctx2.fillStyle = "white";
+    ctx2.fillText(`Game-Over! You scored ${score} points`, 100, 200);
+    ctx2.font = "30px Arial";
+    ctx2.fillStyle = "white";
+    ctx2.fillText(`Wanna try again?`, 200, 300);
+  }
   
 }
-
+let score = 0;
 requestAnimationFrame(updateCanvas);
 
 
+const gameOverCanvas = document.getElementById("game-over-canvas");
+const ctx2 = gameOverCanvas.getContext("2d");
 
 
 
