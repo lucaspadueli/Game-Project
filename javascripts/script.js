@@ -4,6 +4,10 @@ const ctx = canvas.getContext('2d');
 const firstScreen = document.getElementById("first-screen");
 const ctx3 = firstScreen.getContext("2d");
 
+let gameStarted = false;
+document.body.removeChild(canvas)
+
+
 function startScreen () {
   ctx3.fillStyle = "blue";
   ctx3.fillRect(0, 0, 700, 650);
@@ -21,10 +25,40 @@ function startScreen () {
     const y = event.clientY - event.target.offsetTop;
 
     if (x >= 250 && x <= 450 && y >= 300 && y <= 400) {
+      gameStarted = true;
+      if(gameStarted == true){
+      document.body.appendChild(canvas);
       firstScreen.style.display = "none";
       canvas.style.display = "block";
       updateCanvas();
-    }
+      time = 0;
+      document.addEventListener('keydown', e => {
+        console.log(e);
+        switch (e.keyCode) {
+          case 38:
+            hero.moveUp();
+            break;
+          case 40:
+            hero.moveDown();
+            break;
+          case 37:
+            hero.moveLeft();
+            break;
+          case 39:
+            hero.moveRight();
+            break;
+            case 32:
+              hero.slideRight();
+              break;
+              case 86:
+                hero.slideLeft();
+                break;
+                
+        }
+        updateCanvas();
+      })
+
+    } }
   });
 }
 
@@ -32,7 +66,7 @@ startScreen();
 
 class Hero {
   constructor(){
-    this.x = 505;
+    this.x = 120;
     this.y = 450;
     this.jumpTimeout = null;
     const img = new Image ();
@@ -144,13 +178,18 @@ class DarkSadFace {
   }
   update() {
     this.y += this.speed;
-    if (this.y > 650) {
+    if(time == 0){
+      this.x = 50;
+      this.y = 0;
+    }
+    else if (this.y > 650) {
       this.y = 0;
       let darkPositions = [120,160,240,300,360,400,480,550,620];
       for(let i = 0; i < darkPositions.length; i++){
         this.x = darkPositions[Math.floor(Math.random() * darkPositions.length)]
       }
     }
+    
   }
 
 }
@@ -158,7 +197,7 @@ class DarkSadFace {
 // happy yellow face.
 
 class HappyYellowFace {
-  constructor (x,y) {
+  constructor (x,y,speed) {
     this.x = x;
     this.y = y;
     this.speed = 5;
@@ -200,7 +239,7 @@ class HappyYellowFace {
     
     this.y += this.speed;
     if (this.y > 650) {
-      this.y = -100;
+      this.y = 0;
       let positionsX = [50,100,140,200,240,290,350,400,450,480,500,530,570];
       for(let i = 0; i < positionsX.length; i++){
         this.x = positionsX[Math.floor(Math.random() * 13)]
@@ -208,6 +247,10 @@ class HappyYellowFace {
       this.collisionDetected = false;
       
     }
+    else if(time == 0){
+      this.y = 0 
+    }
+   
     
   }
 
@@ -244,7 +287,11 @@ class Flower {
 
   update() {
     this.y -= this.speed;
-    if (this.y <= 0) {
+    if (time == 0){
+      this.y = 650;
+      this.x = 350;
+    }
+    else if (this.y <= 0) {
       this.y = 650;
       this.x = Math.floor(Math.random() * 700)
     }
@@ -254,7 +301,7 @@ class Flower {
 
 
 let darkSadFace = new DarkSadFace(400,0,5);
-let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 700),0);
+let happyYellowFace = new HappyYellowFace(Math.floor(Math.random() * 700),0,5);
 const floor = new Floor();
 const hero = new Hero();
 let flower = new Flower (300, 650, 3);
@@ -271,31 +318,7 @@ let intervalId = setInterval(() => {
 }, 16);
 
 
-document.addEventListener('keydown', e => {
-  console.log(e);
-  switch (e.keyCode) {
-    case 38:
-      hero.moveUp();
-      break;
-    case 40:
-      hero.moveDown();
-      break;
-    case 37:
-      hero.moveLeft();
-      break;
-    case 39:
-      hero.moveRight();
-      break;
-      case 32:
-        hero.slideRight();
-        break;
-        case 86:
-          hero.slideLeft();
-          break;
-          
-  }
-  updateCanvas();
-})
+
 
 
 
@@ -306,12 +329,14 @@ sky.addEventListener("load", ()=> {
 })
 
 let time = 0;
+
 function timer (){
-time += 1;
+time += 1
 console.log(`Time is ${time}`);
 }
 const timerInterval = setInterval(timer,1000);
-
+timer()
+  
 function collision(hero, face) {
   if (hero.x < face.x + 60 &&
       hero.x + 60 > face.x &&
@@ -371,8 +396,11 @@ function secondDarkCollision (hero, face){
   
 } }
 let gameOver = false;
-let gameStarted = false;
+
+
 function updateCanvas() {
+  
+ if(gameStarted == true){
   ctx.clearRect(0, 0, 700, 650)
   ctx.drawImage(sky, 0, 0, 700, 650);
   floor.draw();
@@ -418,7 +446,7 @@ function updateCanvas() {
     ctx2.fillText(`Wanna try again?`, 200, 300);
   }
   
-}
+}}
 let score = 0;
 requestAnimationFrame(updateCanvas);
 
