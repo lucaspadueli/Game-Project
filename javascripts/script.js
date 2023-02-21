@@ -9,7 +9,6 @@ let gameStarted = false;
 let time = 0;
 let gameOver = false;
 let score = 0;
-let facesArray = [];
 let intervalId = null;
 startScreen();
 
@@ -23,7 +22,7 @@ function timer() {
 
 
 function startScreen() {
-  let begginingScreen = new Image ();
+  /*let begginingScreen = new Image ();
   begginingScreen.src = "/images/start-screen.jpg"
   begginingScreen.addEventListener("load", ()=>{
     ctx3.drawImage(begginingScreen,0,0,700,650)
@@ -35,8 +34,15 @@ function startScreen() {
 
   startButton.addEventListener("load", () => {
     ctx3.drawImage(startButton,250,300,200,100)
-  })
+  })*/
   
+  ctx3.fillStyle = "blue";
+  ctx3.fillRect (0,0,700,650);
+  ctx3.fillStyle = "red";
+  ctx3.fillRect (250,300,200,100);
+  ctx3.font = "25px Arial";
+  ctx3.fillStyle = "white";
+  ctx3.fillText("START", 310,360);
   
   firstScreen.addEventListener("click", (event) => {
     const x = event.clientX - event.target.offsetLeft;
