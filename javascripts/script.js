@@ -36,9 +36,7 @@ function startScreen() {
   startButton.addEventListener("load", () => {
     ctx3.drawImage(startButton,250,300,200,100)
   })
-  ctx3.font = "40px Arial";
-  ctx3.fillStyle = "black";
-  ctx3.fillText(`The Jumping-Faces Game`, 100, 200);
+  
   
   firstScreen.addEventListener("click", (event) => {
     const x = event.clientX - event.target.offsetLeft;
