@@ -23,17 +23,23 @@ function timer() {
 
 
 function startScreen() {
-  ctx3.fillStyle = "blue";
-  ctx3.fillRect(0, 0, 700, 650);
+  let begginingScreen = new Image ();
+  begginingScreen.src = "/images/start-screen.jpg"
+  begginingScreen.addEventListener("load", ()=>{
+    ctx3.drawImage(begginingScreen,0,0,700,650)
+  })
+ 
+ 
+    let startButton = new Image ();
+    startButton.src = "/images/start-button.png"
 
-  // draw the button
-  ctx3.fillStyle = "red";
-  ctx3.fillRect(250, 300, 200, 100);
-  ctx3.fillStyle = "white";
-  ctx3.font = "30px Arial";
-  ctx3.fillText("Start", 305, 360);
-
-  // add a click event listener to the button
+  startButton.addEventListener("load", () => {
+    ctx3.drawImage(startButton,250,300,200,100)
+  })
+  ctx3.font = "40px Arial";
+  ctx3.fillStyle = "black";
+  ctx3.fillText(`The Jumping-Faces Game`, 100, 200);
+  
   firstScreen.addEventListener("click", (event) => {
     const x = event.clientX - event.target.offsetLeft;
     const y = event.clientY - event.target.offsetTop;
@@ -171,7 +177,7 @@ class DarkSadFace {
   update() {
     this.y += this.speed;
     if (time == 0) {
-      this.x = 50;
+      
       this.y = 0;
     } else if (this.y > 650) {
       this.y = 0;
@@ -279,13 +285,14 @@ update() {
   }
 }
 
-let darkSadFace = new DarkSadFace(400, 0, 5);
+let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 700), 0, 5);
 let happyYellowFace = new HappyYellowFace(
 Math.floor(Math.random() * 700),0,5);
 const floor = new Floor();
 const hero = new Hero();
 let flower = new Flower(300, 650, 3);
-let secondFace = new HappyYellowFace(Math.floor(Math.random() * 700), 0);
+let secondFace = new HappyYellowFace(Math.floor(Math.random() * 700), 0, 5);
+let secondSadFace = new DarkSadFace (400, 0 , 5);
 let happyArray = [];
 
 happyArray.push(new HappyYellowFace());
@@ -316,21 +323,7 @@ function collision(hero, face) {
   }
 }
 
-function secondCollision(hero, face) {
-  if (
-    hero.x < face.x + 50 &&
-    hero.x + 50 > face.x &&
-    hero.y < face.y + 50 &&
-    hero.y + 50 > face.y &&
-    !face.collisionDetected
-  ) {
-    face.collisionDetected = true;
-    face.y = 700;
-    return 5;
-  } else {
-    return 0;
-  }
-}
+
 
 function flowerCollision(hero, flower) {
   if (
@@ -361,18 +354,7 @@ function darkCollision(hero, face) {
   }
 }
 
-function secondDarkCollision(hero, face) {
-  if (
-    hero.x < face.x + 50 &&
-    hero.x + 50 > face.x &&
-    hero.y < face.y + 50 &&
-    hero.y + 50 > face.y &&
-    !face.collisionDetected
-  ) {
-    return true;
-    face.y = 700;
-  }
-}
+
 
 
 function updateCanvas() {
@@ -380,28 +362,43 @@ function updateCanvas() {
   happyYellowFace.update();
   flower.update();
   floor.update();
-  secondFace.update();
+  //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
   ctx.drawImage(sky, 0, 0, 700, 650);
   floor.draw();
   hero.draw();
   darkSadFace.draw();
   happyYellowFace.draw(ctx);
+  //secondFace.draw(ctx)
   flower.draw(ctx);
   ctx.font = "20px Arial";
   ctx.fillStyle = "white";
   ctx.fillText(`Time: ${time}`, 10, 25);
   
   score += collision(hero, happyYellowFace);
-  score += secondCollision(hero, secondFace);
+  score += collision(hero, secondFace);
   score += flowerCollision(hero, flower);
+  
+  if(time > 10){
+    secondFace.update();
+    secondFace.draw(ctx);
+    secondSadFace.update()
+    secondSadFace.draw(ctx);
+  }
+  
+  
   if (darkCollision(hero, darkSadFace)) {
     gameOver = true;
     canvas.style.display = "none";
     gameOverCanvas.style.display = "block";
     drawGameOver(score);
   }
-
+  else if(darkCollision(hero, secondSadFace)){
+    gameOver = true;
+    canvas.style.display = "none";
+    gameOverCanvas.style.display = "block";
+    drawGameOver(score);
+  }
   ctx.fillText(`Score: ${score}`, 600, 25);
   if (time > 20 && time < 30) {
     happyYellowFace.speed = 7;
@@ -410,15 +407,12 @@ function updateCanvas() {
   } else if (time >= 30 && time < 40) {
     happyYellowFace.speed = 9;
     darkSadFace.speed = 9;
-    flower.speed = 7;
   } else if (time > 40 && time < 50) {
     happyYellowFace.speed = 11;
     darkSadFace.speed = 11;
-    flower.speed = 7;
   } else if (time > 50) {
     happyYellowFace.speed = 13;
     darkSadFace.speed = 13;
-    flower.speed = 7;
   }
 
   if (!gameOver) {
@@ -428,16 +422,7 @@ function updateCanvas() {
     document.body.removeChild(canvas)
     clearInterval(intervalId);
   }
-  function drawGameOver(score) {
-    ctx2.fillStyle = "black";
-    ctx2.fillRect(0, 0, 700, 650);
-    ctx2.font = "30px Arial";
-    ctx2.fillStyle = "white";
-    ctx2.fillText(`Game-Over! You scored ${score} points`, 100, 200);
-    ctx2.font = "30px Arial";
-    ctx2.fillStyle = "white";
-    ctx2.fillText(`Wanna try again?`, 200, 300);
-  }
+  
   function drawYouWon(score) {
     ctx4.fillStyle = "black";
     ctx4.fillRect(0, 0, 700, 650);
@@ -446,10 +431,37 @@ function updateCanvas() {
     ctx4.fillText(
       `Congratulation! You won! You scored ${score} points`,
       100,
-      200
+      150
     );
+
+    ctx4.fillStyle = "white";
+    ctx4.fillText(`Wanna play again?`, 230, 200);
+    
+    let yesButton = new Image ();
+    yesButton.src = "/images/yes.png";
+    
+    yesButton.addEventListener("load", () => {
+      ctx4.drawImage(yesButton, 280, 235, 100, 100);
+    });
+
+    youWon.addEventListener("click", (event)=> {
+      const x = event.clientX - event.target.offsetLeft;
+      const y = event.clientY - event.target.offsetTop;
+  
+      if (x >= 280 && x <= 380 && y >= 235 && y <= 335) {
+        location.reload();
+      }
+    })
+
+
+    
+  
+    
+
+
+
   }
-  if (time >= 60 && score >= 90) {
+  if (time >= 60 && score >= 100) {
     gameOver = true;
     canvas.style.display = "none";
     gameOverCanvas.style.display = "none";
@@ -461,6 +473,33 @@ function updateCanvas() {
     gameOverCanvas.style.display = "block";
     drawGameOver(score);
   }
+  function drawGameOver(score) {
+    ctx2.fillStyle = "black";
+    ctx2.fillRect(0, 0, 700, 650);
+    ctx2.font = "30px Arial";
+    ctx2.fillStyle = "white";
+    ctx2.fillText(`Game-Over! You scored ${score} points`, 100, 130);
+    ctx2.font = "30px Arial";
+    ctx2.fillStyle = "white";
+    ctx2.fillText(`Wanna try again?`, 200, 200);
+    
+    let yesButton = new Image ();
+    yesButton.src = "/images/yes.png";
+    
+    yesButton.addEventListener("load", () => {
+      ctx2.drawImage(yesButton, 260, 250, 100, 100);
+    });
+
+
+ // add a click event listener to the button
+ gameOverCanvas.addEventListener("click", (event) => {
+  const x = event.clientX - event.target.offsetLeft;
+  const y = event.clientY - event.target.offsetTop;
+
+  if (x >= 260 && x <= 360 && y >= 250 && y <= 450) {
+    location.reload() }})
+  
+}
 }
 
 
