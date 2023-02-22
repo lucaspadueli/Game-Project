@@ -492,20 +492,18 @@ function updateCanvas() {
     ctx2.fillStyle = "white";
     ctx2.fillText(`Wanna try again?`, 200, 200);
     
-    let yesButton = new Image ();
-    yesButton.src = "/images/yes.png";
-    
-    yesButton.addEventListener("load", () => {
-      ctx2.drawImage(yesButton, 260, 250, 100, 100);
-    });
-
+    ctx2.fillStyle = "red";
+    ctx2.fillRect(215,255,200,100)
+    ctx2.font = "30px Arial";
+    ctx2.fillStyle = "white";
+    ctx2.fillText ("YES",290,310)
 
  // add a click event listener to the button
  gameOverCanvas.addEventListener("click", (event) => {
   const x = event.clientX - event.target.offsetLeft;
   const y = event.clientY - event.target.offsetTop;
 
-  if (x >= 260 && x <= 360 && y >= 250 && y <= 450) {
+  if (x >= 215 && x <= 415 && y >= 255 && y <= 455) {
     location.reload() }})
   
 }
