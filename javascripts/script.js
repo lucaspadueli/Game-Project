@@ -22,27 +22,21 @@ function timer() {
 
 
 function startScreen() {
-  /*let begginingScreen = new Image ();
-  begginingScreen.src = "/images/start-screen.jpg"
-  begginingScreen.addEventListener("load", ()=>{
-    ctx3.drawImage(begginingScreen,0,0,700,650)
-  })
- 
- 
+    
     let startButton = new Image ();
-    startButton.src = "/images/start-button.png"
+    startButton.src = "https://www.pngall.com/wp-content/uploads/9/Start-Button-Vector-PNG-High-Quality-Image.png"
 
   startButton.addEventListener("load", () => {
     ctx3.drawImage(startButton,250,300,200,100)
-  })*/
+  })
   
   ctx3.fillStyle = "blue";
   ctx3.fillRect (0,0,700,650);
-  ctx3.fillStyle = "red";
+  /*ctx3.fillStyle = "red";
   ctx3.fillRect (250,300,200,100);
   ctx3.font = "25px Arial";
   ctx3.fillStyle = "white";
-  ctx3.fillText("START", 310,360);
+  ctx3.fillText("START", 310,360);*/
   
   firstScreen.addEventListener("click", (event) => {
     const x = event.clientX - event.target.offsetLeft;
@@ -166,16 +160,16 @@ class DarkSadFace {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.speed = 5;
+    this.speed = 3;
     const img = new Image();
     img.addEventListener("load", () => {
       this.img = img;
     });
-    img.src = "/images/sad-face.png";
+    img.src = "/images/clipart4376039.png";
   }
 
   draw() {
-    ctx.drawImage(this.img, this.x, this.y, 70, 70);
+    ctx.drawImage(this.img, this.x, this.y, 70, 70)
   }
 
   update() {
@@ -289,23 +283,19 @@ update() {
   }
 }
 
-let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 700), 0, 5);
+let darkSadFace = new DarkSadFace(Math.floor(Math.random() * 700), 0);
 let happyYellowFace = new HappyYellowFace(
 Math.floor(Math.random() * 700),0,5);
 const floor = new Floor();
 const hero = new Hero();
 let flower = new Flower(300, 650, 3);
-let secondFace = new HappyYellowFace(Math.floor(Math.random() * 700), 0, 5);
-let secondSadFace = new DarkSadFace (400, 0 , 5);
+let secondFace = new HappyYellowFace(Math.floor(Math.random() * 700), 0, 3);
+let secondSadFace = new DarkSadFace (400, 0 );
 let happyArray = [];
 
 happyArray.push(new HappyYellowFace());
 
-const sky = new Image();
-sky.src = "/images/starPic.png";
-sky.addEventListener("load", () => {
-  updateCanvas();
-});
+
 
 
 // const timerInterval = setInterval(timer, 1000);
@@ -347,10 +337,10 @@ function flowerCollision(hero, flower) {
 
 function darkCollision(hero, face) {
   if (
-    hero.x < face.x + 40 &&
-    hero.x + 40 > face.x &&
-    hero.y < face.y + 40 &&
-    hero.y + 40 > face.y &&
+    hero.x < face.x + 50 &&
+    hero.x + 50 > face.x &&
+    hero.y < face.y + 50 &&
+    hero.y + 50 > face.y &&
     !face.collisionDetected
   ) {
     return true;
@@ -366,9 +356,11 @@ function updateCanvas() {
   happyYellowFace.update();
   flower.update();
   floor.update();
+
   //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
-  ctx.drawImage(sky, 0, 0, 700, 650);
+  ctx.fillStyle = "#000080";
+  ctx.fillRect(0, 0, 750, 650);
   floor.draw();
   hero.draw();
   darkSadFace.draw();
@@ -405,18 +397,18 @@ function updateCanvas() {
   }
   ctx.fillText(`Score: ${score}`, 600, 25);
   if (time > 20 && time < 30) {
-    happyYellowFace.speed = 7;
-    darkSadFace.speed = 7;
+    happyYellowFace.speed = 6;
+    darkSadFace.speed = 6;
     flower.speed = 5;
   } else if (time >= 30 && time < 40) {
+    happyYellowFace.speed = 8;
+    darkSadFace.speed =8;
+  } else if (time > 40 && time < 50) {
     happyYellowFace.speed = 9;
     darkSadFace.speed = 9;
-  } else if (time > 40 && time < 50) {
+  } else if (time > 50) {
     happyYellowFace.speed = 11;
     darkSadFace.speed = 11;
-  } else if (time > 50) {
-    happyYellowFace.speed = 13;
-    darkSadFace.speed = 13;
   }
 
   if (!gameOver) {
