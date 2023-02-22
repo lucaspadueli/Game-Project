@@ -165,7 +165,7 @@ class DarkSadFace {
     img.addEventListener("load", () => {
       this.img = img;
     });
-    img.src = "/images/clipart4376039.png";
+    img.src = "/images/blue-face.png";
   }
 
   draw() {
@@ -359,7 +359,7 @@ function updateCanvas() {
 
   //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
-  ctx.fillStyle = "#000080";
+  ctx.fillStyle = "purple";
   ctx.fillRect(0, 0, 750, 650);
   floor.draw();
   hero.draw();
