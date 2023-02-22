@@ -160,21 +160,21 @@ class DarkSadFace {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.speed = 3;
+    this.speed = 5;
    
   }
 
   draw(ctx) {
     ctx.fillStyle = "gray";
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
+    ctx.arc(this.x, this.y, 35, 0, 2 * Math.PI);
     ctx.fill();
 
     // Draw the character's eyes
     ctx.fillStyle = "black";
     ctx.beginPath();
-    ctx.arc(this.x - 5, this.y + 5, 3, 0, 2 * Math.PI);
-    ctx.arc(this.x + 5, this.y + 5, 3, 0, 2 * Math.PI);
+    ctx.arc(this.x - 5, this.y + 5, 5, 0, 2 * Math.PI);
+    ctx.arc(this.x + 5, this.y + 5, 5, 0, 2 * Math.PI);
     ctx.fill();
 
     // Draw the character's pupils
@@ -188,7 +188,7 @@ class DarkSadFace {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(this.x, this.y - 8, 4, Math.PI, 2 * Math.PI, false);
+    ctx.arc(this.x, this.y - 14, 7, Math.PI, 2 * Math.PI, true);
     ctx.stroke();
   }
 
@@ -379,7 +379,7 @@ function updateCanvas() {
 
   //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
-  ctx.fillStyle = "red";
+  ctx.fillStyle = "blue";
   ctx.fillRect(0, 0, 750, 650);
   floor.draw();
   hero.draw();
@@ -453,24 +453,24 @@ function updateCanvas() {
     ctx4.fillStyle = "white";
     ctx4.fillText(`Wanna play again?`, 230, 200);
     
-    let yesButton = new Image ();
-    yesButton.src = "/images/yes.png";
-    
-    yesButton.addEventListener("load", () => {
-      ctx4.drawImage(yesButton, 280, 235, 100, 100);
-    });
+    ctx4.fillStyle = "red";
+    ctx4.fillRect(215,255,200,100)
+    ctx4.font = "30px Arial";
+    ctx4.fillStyle = "white";
+    ctx4.fillText ("YES",290,310)
+
 
     youWon.addEventListener("click", (event)=> {
       const x = event.clientX - event.target.offsetLeft;
       const y = event.clientY - event.target.offsetTop;
   
-      if (x >= 280 && x <= 380 && y >= 235 && y <= 335) {
+      if (x >= 200 && x <= 400 && y >= 255 && y <= 355) {
         location.reload();
       }
     })
 
   }
-  if (time >= 60 && score >= 100) {
+  if (time >= 60 && score > 100) {
     gameOver = true;
     canvas.style.display = "none";
     gameOverCanvas.style.display = "none";
