@@ -30,7 +30,7 @@ function startScreen() {
     ctx3.drawImage(startButton,250,300,200,100)
   })
   
-  ctx3.fillStyle = "blue";
+  ctx3.fillStyle = "purple";
   ctx3.fillRect (0,0,700,650);
   /*ctx3.fillStyle = "red";
   ctx3.fillRect (250,300,200,100);
