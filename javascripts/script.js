@@ -161,15 +161,35 @@ class DarkSadFace {
     this.x = x;
     this.y = y;
     this.speed = 3;
-    const img = new Image();
-    img.addEventListener("load", () => {
-      this.img = img;
-    });
-    img.src = "/images/blue-face.png";
+   
   }
 
-  draw() {
-    ctx.drawImage(this.img, this.x, this.y, 70, 70)
+  draw(ctx) {
+    ctx.fillStyle = "gray";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's eyes
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(this.x - 5, this.y + 5, 3, 0, 2 * Math.PI);
+    ctx.arc(this.x + 5, this.y + 5, 3, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's pupils
+    ctx.fillStyle = "white";
+    ctx.beginPath();
+    ctx.arc(this.x - 5, this.y + 5, 1, 0, 2 * Math.PI);
+    ctx.arc(this.x + 5, this.y + 5, 1, 0, 2 * Math.PI);
+    ctx.fill();
+
+    // Draw the character's mouth
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y - 8, 4, Math.PI, 2 * Math.PI, false);
+    ctx.stroke();
   }
 
   update() {
@@ -363,7 +383,7 @@ function updateCanvas() {
   ctx.fillRect(0, 0, 750, 650);
   floor.draw();
   hero.draw();
-  darkSadFace.draw();
+  darkSadFace.draw(ctx);
   happyYellowFace.draw(ctx);
   //secondFace.draw(ctx)
   flower.draw(ctx);
@@ -448,13 +468,6 @@ function updateCanvas() {
         location.reload();
       }
     })
-
-
-    
-  
-    
-
-
 
   }
   if (time >= 60 && score >= 100) {
