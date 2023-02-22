@@ -379,7 +379,7 @@ function updateCanvas() {
 
   //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
-  ctx.fillStyle = "purple";
+  ctx.fillStyle = "red";
   ctx.fillRect(0, 0, 750, 650);
   floor.draw();
   hero.draw();
