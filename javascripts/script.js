@@ -1,6 +1,7 @@
 const canvas = document.getElementById("canvas-project");
 const ctx = canvas.getContext("2d");
 
+
 const firstScreen = document.getElementById("first-screen");
 const ctx3 = firstScreen.getContext("2d");
 const youWon = document.getElementById("you-won");
@@ -32,11 +33,7 @@ function startScreen() {
   
   ctx3.fillStyle = "blue";
   ctx3.fillRect (0,0,700,650);
-  /*ctx3.fillStyle = "red";
-  ctx3.fillRect (250,300,200,100);
-  ctx3.font = "25px Arial";
-  ctx3.fillStyle = "white";
-  ctx3.fillText("START", 310,360);*/
+ 
   ctx3.font = "40px Arial";
     ctx3.fillStyle = "yellow";
     ctx3.fillText(
@@ -134,12 +131,12 @@ class Hero {
   }
   moveLeft() {
     if (this.x > 20) {
-      this.x -= 48;
+      this.x -= 30;
     }
   }
   moveRight() {
     if (this.x < 603) {
-      this.x += 48;
+      this.x += 30;
     }
   }
 
@@ -176,13 +173,13 @@ class DarkSadFace {
     this.x = x;
     this.y = y;
     this.speed = 5;
-   
+    
   }
 
   draw(ctx) {
     ctx.fillStyle = "gray";
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 35, 0, 2 * Math.PI);
+    ctx.arc(this.x, this.y, 29, 0, 2 * Math.PI);
     ctx.fill();
 
     // Draw the character's eyes
@@ -371,17 +368,20 @@ function flowerCollision(hero, flower) {
 }
 
 function darkCollision(hero, face) {
-  if (
-    hero.x < face.x + 50 &&
-    hero.x + 50 > face.x &&
-    hero.y < face.y + 50 &&
-    hero.y + 50 > face.y &&
-    !face.collisionDetected
-  ) {
-    return true;
+  const heroRight = hero.x + 70;
+  const heroBottom = hero.y + 70;
+  const faceRight = face.x + 25;
+  const faceBottom = face.y + 25;
+
+  if (hero.x < faceRight && heroRight > face.x && hero.y < faceBottom && heroBottom > face.y && !face.collisionDetected) {
+    face.collisionDetected = true;
     face.y = 700;
+    return true;
   }
+
+  return false;
 }
+
 
 
 
