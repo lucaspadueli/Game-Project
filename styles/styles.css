@@ -1,3 +1,22 @@
+* {
+    margin-left: 8vw;
+  }
+
+body{
+    background-color: black;
+    
+}
+
+#instructions{
+ background-color: aliceblue;
+ width:650px;
+ margin-left: 0;
+ position: absolute;
+ margin-top: 670px;
+ color: white;
+ background-color: black;
+}
+
 #game-over-canvas{
     display: none;
     background-color: black;

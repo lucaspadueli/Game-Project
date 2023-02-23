@@ -30,19 +30,33 @@ function startScreen() {
     ctx3.drawImage(startButton,250,300,200,100)
   })
   
-  ctx3.fillStyle = "purple";
+  ctx3.fillStyle = "blue";
   ctx3.fillRect (0,0,700,650);
   /*ctx3.fillStyle = "red";
   ctx3.fillRect (250,300,200,100);
   ctx3.font = "25px Arial";
   ctx3.fillStyle = "white";
   ctx3.fillText("START", 310,360);*/
+  ctx3.font = "40px Arial";
+    ctx3.fillStyle = "yellow";
+    ctx3.fillText(
+      `The Jumping-Faces game`,
+      120,
+      250
+    );
+    ctx3.font = "20px arial"
+    ctx3.fillText(
+      `Leia as intrucoes abaixo.`,
+      240,
+      550
+    );
+
   
   firstScreen.addEventListener("click", (event) => {
     const x = event.clientX - event.target.offsetLeft;
     const y = event.clientY - event.target.offsetTop;
 
-    if (x >= 250 && x <= 450 && y >= 300 && y <= 400) {
+    if (x >= 150 && x <= 650 && y >= 300 && y <= 400) {
       gameStarted = true;
       
       document.body.appendChild(canvas);
@@ -54,26 +68,27 @@ function startScreen() {
       document.body.removeChild(gameOverCanvas);
       document.addEventListener("keydown", (e) => {
         console.log(e);
-        switch (e.keyCode) {
-          case 38:
+        switch (e.key) {
+          case "ArrowUp":
             hero.moveUp();
             break;
-          case 40:
+          case "ArrowDown":
             hero.moveDown();
             break;
-          case 37:
+          case "ArrowLeft":
             hero.moveLeft();
             break;
-          case 39:
+          case "ArrowRight":
             hero.moveRight();
             break;
-          case 32:
+          case " ":
             hero.slideRight();
             break;
-          case 86:
+          case "v":
             hero.slideLeft();
             break;
         }
+        
         
       });
       requestAnimationFrame(updateCanvas);
@@ -464,7 +479,7 @@ function updateCanvas() {
       const x = event.clientX - event.target.offsetLeft;
       const y = event.clientY - event.target.offsetTop;
   
-      if (x >= 200 && x <= 400 && y >= 255 && y <= 355) {
+      if (x >= 100 && x <= 600 && y >= 255 && y <= 355) {
         location.reload();
       }
     })
@@ -503,7 +518,7 @@ function updateCanvas() {
   const x = event.clientX - event.target.offsetLeft;
   const y = event.clientY - event.target.offsetTop;
 
-  if (x >= 215 && x <= 415 && y >= 255 && y <= 455) {
+  if (x >= 165 && x <= 655 && y >= 255 && y <= 455) {
     location.reload() }})
   
 }
