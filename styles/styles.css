@@ -3,19 +3,23 @@
   }
 
 body{
-    background-color: black;
+    background-color: yellow;
+    display: flex;
+    flex-direction: row;
     
 }
 
 #instructions{
  background-color: aliceblue;
- width:650px;
+ width:600px;
  margin-left: 0;
  position: absolute;
  margin-top: 670px;
- color: white;
- background-color: black;
+ color: black;
+ background-color: yellow;
 }
+
+
 
 #game-over-canvas{
     display: none;

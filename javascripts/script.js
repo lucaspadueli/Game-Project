@@ -1,3 +1,6 @@
+// This is the main file for the Jumping-Faces Game.
+// For more information on how to play and the game's features, see the README file.
+
 const canvas = document.getElementById("canvas-project");
 const ctx = canvas.getContext("2d");
 
@@ -30,6 +33,21 @@ function startScreen() {
   startButton.addEventListener("load", () => {
     ctx3.drawImage(startButton,250,300,200,100)
   })
+
+  let faceBack = new Image ();
+  faceBack.src = "./images/hap.png"
+
+  faceBack.addEventListener("load", () => {
+    ctx3.drawImage(faceBack,150,100,60,60)
+  })
+
+  let darkFaceBack = new Image ();
+  darkFaceBack.src = "./images/black-face.png"
+
+  faceBack.addEventListener("load", () => {
+    ctx3.drawImage(darkFaceBack,500,100,60,60)
+  })
+
   
   ctx3.fillStyle = "blue";
   ctx3.fillRect (0,0,700,650);
@@ -43,8 +61,8 @@ function startScreen() {
     );
     ctx3.font = "20px arial"
     ctx3.fillText(
-      `Leia as intrucoes abaixo.`,
-      240,
+      `Read the instructions below.`,
+      220,
       550
     );
 
@@ -93,6 +111,7 @@ function startScreen() {
     }
   });
 }
+
 
 class Hero {
   constructor() {
@@ -161,8 +180,20 @@ class Floor {
   }
 
   draw() {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    let gradient = ctx.createLinearGradient(0, this.y, 0, this.y + this.height);
+gradient.addColorStop(0, "#856514");
+gradient.addColorStop(1, "#8B5A2B");
+ctx.fillStyle = gradient;
+ctx.fillRect(this.x, this.y, this.width, this.height);
+
+// Draw dots on the floor
+ctx.fillStyle = "white";
+for (let i = 0; i < 100; i++) {
+  let x = this.x + Math.random() * this.width;
+  let y = this.y + Math.random() * this.height;
+  ctx.fillRect(x, y, 2, 2);
+}
+    
   }
 
   update() {}
@@ -329,7 +360,6 @@ happyArray.push(new HappyYellowFace());
 
 
 
-
 // const timerInterval = setInterval(timer, 1000);
 
 
@@ -394,8 +424,23 @@ function updateCanvas() {
 
   //secondFace.update();
   ctx.clearRect(0, 0, 700, 650);
-  ctx.fillStyle = "blue";
-  ctx.fillRect(0, 0, 750, 650);
+  let gradient = ctx.createLinearGradient(0, 0, 0, 650);
+gradient.addColorStop(0, "#4c669f");
+gradient.addColorStop(1, "#192f6a");
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, 750, 650);
+
+// Draw stars
+ctx.fillStyle = "white";
+for (let i = 0; i < 200; i++) {
+  let x = Math.random() * 750;
+  let y = Math.random() * 650;
+  ctx.fillRect(x, y, 1, 1);
+}
+
+
+
+
   floor.draw();
   hero.draw();
   darkSadFace.draw(ctx);
